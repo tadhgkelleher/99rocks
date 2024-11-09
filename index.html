@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors & 99 Bottles of Beer</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #2c3e50;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .buttons button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .buttons button:hover {
+            background-color: #2980b9;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .beer-lyrics {
+            margin-top: 20px;
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', Courier, monospace;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Rock, Paper, Scissors & 99 Bottles of Beer</h1>
+    <div class="game-container">
+        <div class="buttons">
+            <button onclick="playRound('rock')">Rock</button>
+            <button onclick="playRound('paper')">Paper</button>
+            <button onclick="playRound('scissors')">Scissors</button>
+        </div>
+        <div class="result" id="result"></div>
+        <div class="beer-lyrics" id="beerLyrics"></div>
+    </div>
+
+    <script>
+        let userWins = 0;
+        let computerWins = 0;
+        let ties = 0;
+        let round = 0;
+
+        function playRound(userChoice) {
+            if (round >= 3) return; // Limit to 3 rounds
+
+            const choices = ['rock', 'paper', 'scissors'];
+            const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+            let result = '';
+
+            if (userChoice === computerChoice) {
+                result = "It's a tie! You both chose " + userChoice + ".";
+                ties++;
+            } else if (userChoice === 'rock') {
+                result = (computerChoice === 'paper') ? "You lose! Paper covers Rock." : "You win! Rock crushes Scissors.";
+                (computerChoice === 'paper') ? computerWins++ : userWins++;
+            } else if (userChoice === 'paper') {
+                result = (computerChoice === 'scissors') ? "You lose! Scissors cut Paper." : "You win! Paper covers Rock.";
+                (computerChoice === 'scissors') ? computerWins++ : userWins++;
+            } else if (userChoice === 'scissors') {
+                result = (computerChoice === 'rock') ? "You lose! Rock crushes Scissors." : "You win! Scissors cut Paper.";
+                (computerChoice === 'rock') ? computerWins++ : userWins++;
+            }
+
+            round++;
+            document.getElementById('result').innerHTML = `Computer chose: ${computerChoice} <br> ${result}`;
+            document.getElementById('beerLyrics').innerHTML = ''; // Clear lyrics
+
+            if (result.includes("lose")) {
+                play99Bottles();
+            }
+
+            if (round === 3) {
+                setTimeout(() => {
+                    document.getElementById('result').innerHTML += `<br><br><b>Final score: You: ${userWins} wins, ${ties} ties, ${computerWins} losses.</b>`;
+                }, 1000);
+            }
+        }
+
+        function play99Bottles() {
+            let lyrics = "\nOh no, you lost! Here's the 99 Bottles of Beer song:\n";
+            for (let i = 99; i > 0; i--) {
+                lyrics += `${i} bottles of beer on the wall, ${i} bottles of beer.\nTake one down and pass it around, ${i - 1} bottles of beer on the wall.\n\n`;
+            }
+            lyrics += "No more bottles of beer on the wall, no more bottles of beer.\nGo to the store and buy some more, 99 bottles of beer on the wall.";
+            document.getElementById('beerLyrics').innerText = lyrics;
+        }
+    </script>
+
+</body>
+</html>
